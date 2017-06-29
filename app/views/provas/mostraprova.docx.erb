@@ -1,0 +1,67 @@
+<!DOCTYPE html>,
+<html lang="pt-br">
+<body>
+<%letras = Array.wrap(["A","B","C","D","E","F","G","H","I","J","K"])%>
+<%idqu = 1%>
+
+  
+<h3> Avaliação </h3>
+ 
+
+</br>
+<%@questoes.select("distinct(idquestao)").each do |qq|%>
+
+<%idx = 0%>	
+
+<p><b><%=idqu%>)</b>- <%=Questao.find(qq.idquestao).descricao.gsub("\r\n","")%></p>
+
+</br>
+
+
+<% @questoes.where("idquestao=?",qq.idquestao).each do |qr| %>
+
+
+<p><b><%=letras[idx]%> - </b><%= qr.resposta %></p>
+
+ 
+
+<%idx+=1%>
+<% end %>
+</br>
+<h2>&nbsp;</h2>
+
+<%idqu += 1%>
+<%end%>
+<!-- gabarito -->
+<h2>&nbsp;</h2>
+<hr>
+<%idqu = 1%>
+<h3> Gabarito </h3>
+ 
+
+</br>
+<%@questoes.select("distinct(idquestao)").each do |qq|%>
+
+<%idx = 0%>	
+
+
+<% @questoes.where("idquestao=?",qq.idquestao).each do |qr| %>
+
+<%if(qr.correta.to_i == 1)%>
+<p><b><%=idqu%>)</b>&nbsp;<b><%=letras[idx]%></b></p>
+<% end %>
+ 
+
+<%idx+=1%>
+<% end %>
+</br>
+
+
+<%idqu += 1%>
+<%end%>
+
+
+
+
+</body>
+ </html>

@@ -1,0 +1,38 @@
+pt-BR:
+  activerecord:
+    models:
+      questao: Questão
+      resposta: Resposta
+      grupo: Grupos de Questões
+      sub_grupo: Sub Grupos de Questões
+      user: Usuarios
+    attributes:
+      questao:
+        id: "Código"
+        descricao: "Descrição"
+        figura: "Imagem"
+        created_at: "Criado em"
+      resposta:
+         id: "Código"
+         descricao: "Descrição"
+         correta: "Correta ?"
+         pergunta_id: "Código da Questão"
+         created_at: "Criado em"
+      grupo:
+         id: "Código"
+         nome: "Nome do Grupo"
+         pergunta_id: "Código da Questão"
+         created_at: "Criado em"
+      sub_grupo:
+         id: "Código"
+         nome: "Nome do Sub Grupo"
+         pergunta_id: "Código da Questão"
+         created_at: "Criado em"
+      user:
+         id: "Código"
+         email: "Email"
+         nome: "Nome de Usuário"
+         Perfil: "Perfil de Usuário"
+
+
+

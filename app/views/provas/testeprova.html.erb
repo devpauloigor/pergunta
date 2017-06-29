@@ -1,0 +1,41 @@
+<!DOCTYPE html>,
+<html lang="pt-br">
+<body>
+<%letras = Array.wrap(["A","B","C","D","E","F","G","H","I","J","K"])%>
+<%idqu = 1%>
+
+  
+<h3> Avaliação </h3>
+ 
+
+</br>
+<%@questoes.select("distinct(idquestao)").each do |qq|%>
+
+<%idx = 0%>	
+
+<p><b><%=idqu%>)</b>- <%=Questao.find(qq.idquestao).descricao%></p>
+
+</br>
+
+
+<% @questoes.where("idquestao=?",qq.idquestao).each do |qr| %>
+
+
+<p><b><%=letras[idx]%> - </b><%= qr.resposta %></p>
+
+ 
+
+<%idx+=1%>
+<% end %>
+</br>
+<h2>&nbsp;</h2>
+
+<%idqu += 1%>
+<%end%>
+
+<a class="btn btn-info" onclick= "Exportarprova(<%=@idpro%>)">Exportar para Word</a> <a href="/minhasprovas" class="btn btn-primary">Voltar</a>
+<br>
+<br>
+<br>
+</body>
+ </html>

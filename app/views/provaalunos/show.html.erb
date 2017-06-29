@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Prova:</strong>
+  <%= @provaaluno.prova %>
+</p>
+
+<p>
+  <strong>Aluno:</strong>
+  <%= @provaaluno.aluno %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @provaaluno.status %>
+</p>
+
+<%= link_to 'Edit', edit_provaaluno_path(@provaaluno) %> |
+<%= link_to 'Back', provaalunos_path %>

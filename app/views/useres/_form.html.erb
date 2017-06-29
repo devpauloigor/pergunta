@@ -1,0 +1,59 @@
+<%= form_for @user do |f| %>
+ <div class="field">
+  <%@TipoUsuario = User.where('id=?',current_user.id).take.perfil
+ if @TipoUsuario == "Administrador"%>
+ <%= f.label :nome_completo %><br /> 
+<%= f.text_field :nome_completo %>
+</div>
+
+
+  <div class="field">
+ <%= f.label :nome %><br /> 
+<%= f.text_field :nome %>
+</div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autofocus: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :perfil %><br />
+    
+    <%= f.select :perfil, ([["Administrador", "Administrador"],["Aluno", "Aluno"], ["Padrão", "Padrão"],["Professor", "Professor"]])%>
+
+
+
+
+  </div>
+
+  <div class="field">
+    <%= f.label :password %>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "off" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  </div>
+  <br>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                useres_path, :class => 'btn' %>
+  </div>
+<%else%>
+<h1> Aviso! <h1>
+  Seu usuário não possui permissão para realizar esta operação.
+  <br>
+  <br>
+<%= link_to "Voltar", questoes_path, :class => 'btn btn-primary' %>
+
+<%end%>
+
+  
+<% end %>

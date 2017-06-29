@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Provaalunos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Prova</th>
+      <th>Aluno</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @provaalunos.each do |provaaluno| %>
+      <tr>
+        <td><%= provaaluno.prova %></td>
+        <td><%= provaaluno.aluno %></td>
+        <td><%= provaaluno.status %></td>
+        <td><%= link_to 'Show', provaaluno %></td>
+        <td><%= link_to 'Edit', edit_provaaluno_path(provaaluno) %></td>
+        <td><%= link_to 'Destroy', provaaluno, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Provaaluno', new_provaaluno_path %>

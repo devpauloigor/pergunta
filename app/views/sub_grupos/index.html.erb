@@ -1,0 +1,147 @@
+<%- model_class = SubGrupo -%>
+<div class="page-header">
+<h1><b>Cadastro de Sub Grupos</b> <h1>
+
+<h3><b> Grupo: </b></h3>
+  <blockquote>
+<div align="left"> <%= Grupo.find(@grupo_id).nome %></div>
+
+
+ 
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:nome) %></th>
+       <th> Cadastrado Por: </th>
+       
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @sub_grupos.each do |sub_grupo| %>
+
+  <% subGrupoUser= SubGrupo.joins("inner join audits on audits.auditable_id = sub_grupos.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id =sub_grupos.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and sub_grupos.id = ?","SubGrupo","update",sub_grupo.id).select("sub_grupos.id, useres.nome_completo, audits.auditable_type").order('audits.id desc').take%>
+
+   <% subGrupoUserCreate= SubGrupo.joins("inner join audits on audits.auditable_id = sub_grupos.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id =sub_grupos.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and sub_grupos.id = ?","SubGrupo","create",sub_grupo.id).select("sub_grupos.id, useres.nome_completo, audits.auditable_type")%>
+
+<% subGrupoCo = SubGrupo.joins("inner join audits on audits.auditable_id = sub_grupos.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = sub_grupos.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and sub_grupos.id = ?","SubGrupo","update",sub_grupo.id).select("count(*)")%>
+
+<% subGrupoCo.each do |subgCoo| %>
+
+
+<%if subgCoo.count == 0
+    @alterou = "Sem Alterações"
+    @alterouData= "Sem Alterações"
+ 
+    
+    else 
+      #@alterou = questaoCoo.nome_completo 
+       
+    end
+    
+    end
+
+
+    subGrupoUserCreate.each do |subGcreate| 
+     @criadopor = subGcreate.nome_completo
+     end
+
+       %>
+    
+
+
+
+
+
+      <tr>
+        <td><%= link_to sub_grupo.id, sub_grupo_path(sub_grupo) %></td>
+        <td><%= sub_grupo.nome %></td>
+          <td><%=@criadopor%></td>
+       
+     
+       
+        <td>
+
+                   <%= link_to 'Temas', "/temas?subgrupo_id="+sub_grupo.id.to_s, :class => 'btn btn-primary btn-xs' %>
+                    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_sub_grupo_path(sub_grupo), :class => 'btn btn-primary btn-xs' %>
+                  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      sub_grupo_path(sub_grupo),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger btn-xs' %>
+         
+        
+                       
+        </td>
+
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+
+
+
+
+
+      <%= link_to 'Adicionar', '#dialog', data:{:remote => true, :toggle => 'modal', :target => '#dialog'},:class => 'btn btn-default btn-primary', id: "add_resposta" %>&nbsp;
+      <%= link_to "Voltar", grupos_path, :class => 'btn btn-primary' %>
+
+      <br>
+      <br>
+      <br>
+<br>
+
+            <!-- A partir daqui -->
+
+<div class="bs-component">
+  <div id="dialog" class="modal fade" role="dialog" style="display:none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <h4 class="modal-title">Cadastro de Subgrupos</h4>
+        </div>
+
+        <!-- Teste -->
+
+        <p>Descrição: <textarea id="txt_desc" name="descricao"> </textarea></p>
+     
+
+
+
+        
+        
+
+        <!-- fim Teste -->
+
+
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-1">
+             
+            </div>
+            <div class="col-lg-10" style="height: 280px; overflow: auto;">
+            <div id=lsubgrupo> 
+
+
+          </div>
+               
+               
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" onclick= "CadSubGrupo(<%=@grupo_id%>)" >Cadastrar</button>
+          <button type="button" class="btn btn-default" onclick="carregapag()" data-dismiss="modal" >Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

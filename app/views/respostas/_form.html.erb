@@ -1,0 +1,53 @@
+<%= form_for @resposta do |f| %>
+
+
+  <div class="form-group">
+    <%= f.label :descricao, :class => 'control-label' %>
+    <%= f.text_area :descricao, :class => 'form-control' %>
+  </div>
+  <br>
+  <div  class="form-group">
+    <%= f.label :correta, :class => 'control-label' %>
+   <br>
+   <select name="resposta[correta]">                
+   
+  <% if @C == 0 %>
+      <option value=1 >Sim</option>
+      <option value=0 selected>Não</option>
+               
+   <%else%>
+      <option value=1 selected>Sim</option>
+      <option value=0 >Não</option>
+               
+  <%end%>
+</select>
+
+
+<br>
+  </div>
+
+  <br>
+  <div class="form-group">
+    <%= f.label :pergunta_id, :class => 'control-label' %>
+     <%= f.label :pergunta_id, :class => 'control-label' %>
+    <%= f.hidden_field :pergunta_id,  :value => @questao_id %>
+   
+    <%= f.text_area :desc_questao, :value => Questao.find(@questao_id).descricao, :class => 'form-control', disabled: 'disabled'  %>
+  
+  </div>
+<!--Teste    -->
+
+
+
+<!--fim teste-->
+
+<br>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+
+     <%= link_to "Respostas", "/respostas?questao_id="+@questao_id.to_s+"&&pagina=questoes&&page="+@pagen.to_s, :class => 'btn btn-primary' %>
+  </div>
+
+
+
+<% end %>

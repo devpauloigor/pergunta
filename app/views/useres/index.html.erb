@@ -1,0 +1,70 @@
+<%- model_class = User -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize %></h1>
+</div>
+<%@TipoUsuario = User.where('id=?',current_user.id).take.perfil
+ if @TipoUsuario == "Administrador"%>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:email) %></th>
+      <th><%= model_class.human_attribute_name(:reset_password_token) %></th>
+      <th><%= model_class.human_attribute_name(:reset_password_sent_at) %></th>
+      <th><%= model_class.human_attribute_name(:remember_created_at) %></th>
+   
+
+
+      <th><%= model_class.human_attribute_name(:current_sign_in_ip) %></th>
+      <th><%= model_class.human_attribute_name(:last_sign_in_ip) %></th>
+      <th><%= model_class.human_attribute_name(:nome) %></th>
+      <th><%= model_class.human_attribute_name(:perfil) %></th>
+
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @useres.each do |user| %>
+      <tr>
+        <td><%= link_to user.id, user_path(user) %></td>
+        <td><%= user.email %></td>
+        <td><%= user.reset_password_token %></td>
+        <td><%= user.reset_password_sent_at %></td>
+        <td><%= user.remember_created_at %></td>
+
+        <td><%= user.current_sign_in_ip %></td>
+        <td><%= user.last_sign_in_ip %></td>
+        <td><%= user.nome %></td>
+        <td><%= user.perfil %></td>
+
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_user_path(user), :class => 'btn btn-primary btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      user_path(user),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger btn-xs' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_user_path,
+            :class => 'btn btn-primary' %>
+            <%= link_to "Voltar", questoes_path, :class => 'btn btn-primary' %>
+
+<%else%>
+<h1> Aviso! <h1>
+  Seu usuário não possui permissão para realizar esta operação.
+  <br>
+  <br>
+<%= link_to "Voltar", questoes_path, :class => 'btn btn-primary' %>
+
+<%end%>
+<br>
+<br>
+<br>

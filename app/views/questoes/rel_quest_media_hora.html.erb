@@ -1,0 +1,58 @@
+
+
+    
+
+
+<h1><b> Quantidades de Questões Cadastradas por Usuários </b></h1>
+<br>
+
+ <div class="input-group date">
+      <input class="form-control input-s" id="data_rel" name="data_rel" type="text"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+    </div>
+
+    <br>
+
+     <%= link_to 'Consultar',"relatoriomediaminuto",:class => 'btn btn-default btn-primary' %>
+ <br>
+ <%@TipoUsuario = User.where('id=?',current_user.id).take.perfil
+ if @TipoUsuario == "Administrador"%>
+   
+<table class="table table-striped ">
+
+ <thead> 
+    <tr>
+     
+          
+      <th> Nome Completo </th>
+      <th> Total </th>
+      <th> Minutos Trabalhados </th>
+      <th> Questão por minuto </th>
+       </tr>
+        </thead>
+        <tbody>
+
+        <%  @rel.each do |rel| %>
+        <tr class="info">
+        <td><b><%= rel.nome_completo%></b></td>
+        <td><b><%= rel.total%></b></td>
+       <td><b><%= rel.minutos_trabalhados%></b></td>
+       <td><b><%= rel.questao_minuto%></b></td>
+        </tr>
+        <%end%>
+</tbody>
+</table> 
+<div class="alert alert-dismissible alert-info">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>Leia!</strong> <a href="#" class="alert-link"></a><br>As informações de quantidade de questões cadastradas contidas nesta página começaram a ser contabilizadas a partir da atualização 4.5 do sistema. Cadastros efetuados antes desta atualização não foram contabilizados.
+</div>
+
+ <%= link_to 'Voltar',questoes_path,:class => 'btn btn-default btn-primary' %>
+
+  <%else%>
+<h1> Aviso! <h1>
+  Seu usuário não possui permissão para realizar esta operação.
+  <br>
+  <br>
+<%= link_to "Voltar", questoes_path, :class => 'btn btn-primary' %>
+
+<%end%>

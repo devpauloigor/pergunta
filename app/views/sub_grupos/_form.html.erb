@@ -1,0 +1,27 @@
+<%= form_for @sub_grupo do |f| %>
+  <div class="form-group">
+    <%= f.label :nome, :class => 'control-label' %>
+    <%= f.text_field :nome, :class => 'form-control' %>
+
+  </div>
+
+
+   <div class="form-group">  
+   <br> 
+ <%= f.label :grupo_id %><br>
+  <%= f.collection_select(:grupo_id, Grupo.all, :id, :nome) %>
+ 
+
+
+  </div>
+
+
+  <br>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),"/sub_grupos?grupo_id="+@grupoid.to_s, :class => 'btn' %>
+  </div>
+
+
+
+<% end %>

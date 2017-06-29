@@ -1,0 +1,16 @@
+
+alert("Prova Finalizada");
+
+<%idmostraproaluno = Provaaluno.where('id=?',@provaalunosUp)
+  idmostraproaluno.each do |mm|
+  	@mostraproaluno = mm.mostraresultado
+
+  end%>
+
+	
+ <%if(@mostraproaluno.to_i == 2) %>	
+ window.location = "/pages/fimdeprovanota?idresultado=<%=@resultado.provaaluno_id%>";  
+ <%else%>
+ window.location = "/pages/fimdeprova"
+ <%end%>
+<%Provaaluno.update(@provaalunosUp, :status => 3 )%>

@@ -1,0 +1,18 @@
+var dados="";
+<% @subg.each do |sub_grupo| %>
+
+ 
+
+
+
+  dados += "<table class='table table-striped' align=left>";
+ 	dados += "<tr>";
+ 	dados += "<td><%= sub_grupo.nome %> </td>";
+ 	dados += "<div class=row>";
+ 	dados += "</tr>";
+ 	dados += "</table>";
+
+<%end%>
+
+
+$("#lsubgrupo").html(dados);

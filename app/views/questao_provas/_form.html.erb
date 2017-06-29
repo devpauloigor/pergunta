@@ -1,0 +1,25 @@
+<%= form_for(@questao_prova) do |f| %>
+  <% if @questao_prova.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@questao_prova.errors.count, "error") %> prohibited this questao_prova from being saved:</h2>
+
+      <ul>
+      <% @questao_prova.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :prova_id %><br>
+    <%= f.text_field :prova_id %>
+  </div>
+  <div class="field">
+    <%= f.label :questao_id %><br>
+    <%= f.text_field :questao_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

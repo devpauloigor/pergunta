@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Provaaluno:</strong>
+  <%= @resultado.provaaluno %>
+</p>
+
+<p>
+  <strong>Questao:</strong>
+  <%= @resultado.questao %>
+</p>
+
+<p>
+  <strong>Resposta:</strong>
+  <%= @resultado.resposta %>
+</p>
+
+<p>
+  <strong>Correta:</strong>
+  <%= @resultado.correta %>
+</p>
+
+<%= link_to 'Edit', edit_resultado_path(@resultado) %> |
+<%= link_to 'Back', resultados_path %>

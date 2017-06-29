@@ -1,0 +1,12 @@
+/home/user/.rbenv/versions/2.2.2/bin/ruby -r ./siteconf20160818-5468-3xvycg.rb extconf.rb
+
+make "DESTDIR=" clean
+make: *** No rule to make target 'clean'.  Pare.
+
+make "DESTDIR="
+echo "Nada."
+Nada.
+
+make "DESTDIR=" install
+echo "Nada."
+Nada.

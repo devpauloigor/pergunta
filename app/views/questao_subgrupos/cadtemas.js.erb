@@ -1,0 +1,15 @@
+var dados="";
+<% @resptem.each do |sub_grupo| %>
+
+
+  dados += "<table class='table table-striped' align=left>";
+ 	dados += "<tr>";
+ 	dados += "<td><%=sub_grupo.descricao %> </td>";
+ 	dados += "<div class=row>";
+ 	dados += "</tr>";
+ 	dados += "</table>";
+
+<%end%>
+
+
+$("#lquestao_subgrupo").html(dados);

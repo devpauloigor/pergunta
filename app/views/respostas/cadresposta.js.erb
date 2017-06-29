@@ -1,0 +1,32 @@
+var dados="";
+<% @resp.each do |resposta| %>
+
+ <%
+       @respostacorreta = resposta.correta
+
+       if @respostacorreta == 1
+          @respostacorreta = "Correta"
+           @cor = "color:#0DC70D"
+
+        else
+         @respostacorreta = "Incorreta"
+        
+          @cor = "color:#FF1111"
+          end
+
+    %>
+
+
+
+  dados += "<table class='table table-striped' align=left>";
+ 	dados += "<tr>";
+ 	dados += "<td><span style= <%=@cor%> ><b><%= @respostacorreta %></b></span> </td> "; 
+ 	dados += "<td><%= resposta.descricao %> </td>";
+ 	dados += "<div class=row>";
+ 	dados += "</tr>";
+ 	dados += "</table>";
+
+<%end%>
+
+
+$("#lresposta").html(dados);

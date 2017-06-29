@@ -1,0 +1,19 @@
+var dados="";
+<% @tem.each do |tema| %>
+
+
+
+
+
+    dados += "<table class='table table-striped' align=left>";
+ 	dados += "<tr>";
+ 	dados += "<td><span style= <%=@cor%> ><b><%= @respostacorreta %></b></span> </td> "; 
+ 	dados += "<td><%= tema.descricao %> </td>";
+ 	dados += "<div class=row>";
+ 	dados += "</tr>";
+ 	dados += "</table>";
+
+<%end%>
+
+
+$("#ltema").html(dados);

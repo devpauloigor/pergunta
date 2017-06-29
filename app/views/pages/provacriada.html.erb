@@ -1,0 +1,19 @@
+<% @tipoprova = params[:online]
+	if(@tipoprova == "sim")
+		@mensagem = "Prova online agendada com sucesso"
+	else
+		@mensagem = "Prova criada com sucesso"
+    end
+%>
+
+<h1><span class="glyphicon glyphicon-ok-circle" style="color:green"></span> <%=@mensagem%>  </h1>
+
+<%if(@tipoprova == 'sim')%>
+<%@dadosprova = Provaaluno.where('prova_id = ?', @idprova).limit(1)%>
+<%@dadosprova.each do |dp|%>
+<%@diaprova = dp.data.to_date%>
+<h4><span class="glyphicon glyphicon-calendar"></span> <%=@diaprova.strftime("%d/%m/%Y")%></p></h4>
+<h4><span class="glyphicon glyphicon-time"></span> <%=dp.data.strftime("%H:%M")%> </h4>
+<%end%>
+<%end%>
+<a  class="btn btn-primary btn-lg" onclick="Exportarprova(<%=@idprova%>)"> <span class="glyphicon glyphicon-save-file"></span> Download da Prova</a>

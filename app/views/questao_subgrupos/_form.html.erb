@@ -1,0 +1,16 @@
+<%= form_for @questao_subgrupo do |f| %>
+  <div class="form-group">
+    <%= f.label :questao_id, :class => 'control-label' %>
+    <%= f.number_field :questao_id, :class => 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= f.label :sub_grupo_id, :class => 'control-label' %>
+    <%= f.number_field :sub_grupo_id, :class => 'form-control' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                questao_subgrupos_path, :class => 'btn' %>
+  </div>
+<% end %>

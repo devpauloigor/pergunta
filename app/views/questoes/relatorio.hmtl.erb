@@ -1,0 +1,8 @@
+<%- model_class = Vwquestaoporusuario -%>
+
+<%  @rel.each do |rel| %>
+   <p> <%=rel.nome %> <%=rel.count%> </p>
+   
+   <%= link_to 'Voltar',questoes_path,:class => 'btn btn-default btn-primary' %>
+
+<%end%>

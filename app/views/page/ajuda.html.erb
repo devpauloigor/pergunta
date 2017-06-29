@@ -1,0 +1,38 @@
+<ul class="nav nav-tabs">
+  <li class=""><a href="#home" data-toggle="tab" aria-expanded="false">Cadastro de Questões</a></li>
+  <li class="active"><a href="#profile" data-toggle="tab" aria-expanded="true">Cadastro de Respostas</a></li>
+
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+      Qualificação de Perguntas <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#dropdown1" data-toggle="tab">Grupos de Questões</a></li>
+      <li class="divider"></li>
+      <li><a href="#dropdown2" data-toggle="tab">Sub Grupos de Questões</a></li>
+    </ul>
+  </li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane fade" id="home">
+    <p>O <a href=<%=questoes_path%>>Cadastro de Questões</a> é composto apenas de um campo denominado "Descrição" no qual o usuário irá copiar a questão da prova escolhida no site <a href=http://www.medprovas.com/>medprovas</a> e colar no mesmo campo e após isso irá clicar no botão "Salvar" </p>
+  </div>
+  <div class="tab-pane fade active in" id="profile">
+    <p>O usuário poderá cadastrar as respostas logo após terminar o cadastro de uma questão. será mostrado para ele um botão denominado "Cadastrar Respostas" onde será apresentado uma página com todas as respostas já cadastradas, o usuário deve clicar no botão "Adicionar" onde será mostrada os campos "Descrição" e deverá informar se aquela resposta é ou não a correta, após isto ele clicará em adicionar e poderá poreseguir para a próxima resposta, ao terminar o usuário deverá clicar em "Close" para finalizar. </p>
+  </div>
+  <div class="tab-pane fade" id="dropdown1">
+    <p>O Usuário deverá cadastrar nesta opção os Grupos no qual os Subgrupos pertencerão. Após clicar no botão "Novo" será apresentado um campo denominado "Nome do Grupo" onde deverá ser digitado o nome do grupo a ser cadastrado, após isso clique no botão criar. </p>
+  </div>
+  <div class="tab-pane fade" id="dropdown2">
+    <p>Após definir como serão estabelecidos os Subgrupos, o usuário deverá cadastrá-los na opção "Cadastrar Sub Grupo" logo após o cadastro do grupo. Nesta opção será mostrado todos os subgrupos já cadastrados e terá também um botão "Adicionar" no qual será apresentado um campo denominado "Descrição" na qual o usuário digitará o nome do subbrupo.</p>
+  </div>
+</div>
+
+<div class="alert alert-dismissible alert-warning">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <h4>Atenção!</h4>
+  <p>A partir da versão 4.0 do sistema, foi implementada auditorias nos cadastros, alterações e exclusões dos dados, no qual servirá como segurança para os próprios usuários e administradores de sistema. </p>
+</div>
+
+
+<%= link_to 'Voltar',questoes_path,:class => 'btn btn-default btn-primary' %>

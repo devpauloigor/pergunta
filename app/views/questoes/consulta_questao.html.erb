@@ -1,0 +1,361 @@
+<%- model_class = Questao -%>
+<%= javascript_tag do %>
+window.questoesURL = "<%=t questoes_url%>";
+
+<%end%>
+<div class="page-header">
+
+  <h1> <b><a href="/" style="text-decoration:none"><font color="#363636">Questões</font></b></a>  </h1>
+
+
+
+
+   <!--    Barra  -->
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+     
+      <a class="navbar-brand" href="/questoes/new"><b>Nova Questão</b></a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="/grupos">Grupos de Questões<span class="sr-only">(current)</span></a></li>
+    
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Ajuda <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/page/ajuda">Ajuda</a></li>
+            <li><a href="/page/sobre">Sobre</a></li>
+          
+          </ul>
+        </li>
+
+
+
+       <%@TipoUsuario = User.where('id=?',current_user.id).take.perfil %>
+       <% if @TipoUsuario == "Administrador" %>      
+       <li class="dropdown">
+       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Relatórios <span class="caret"></span></a>        
+      <ul class="dropdown-menu" role="menu">
+            <li><%= link_to 'Questões Cadastradas', relatorioqtdquestoes_path %></li>
+            <li><%= link_to 'Respostas Cadastradas', relatorioqtdrespostas_path %></li>
+
+          </ul>
+
+
+        </li>
+     
+          <%end%>
+
+  
+
+    
+
+
+        
+    <li class="dropdown">
+
+          <%@usuario = User.where('id=?',current_user.id).take.nome_completo %>
+
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><%= @usuario%> <span class="caret"></span></a>
+
+          
+       
+           
+
+
+          <ul class="dropdown-menu" role="menu">
+            <li><%= link_to 'Sair', destroy_user_session_path, method: :delete %></li>
+          <% if @TipoUsuario == "Administrador" %>        
+          <li><%= link_to 'Cadastrar Usuario','useres#index'%></li> 
+          <%end%>    
+           </ul>
+            
+            </ul>
+
+        </li>
+     
+
+      <ul class="nav navbar-nav navbar-right">
+      <li ><a <%=link_to image_tag("medlogo.png",:alt => "Descricao img",:id => "id_img",:width => "100px",:height => "25px"), "http://www.medprovas.com/",:target => ("blank")%></span></a></li>
+      </ul>
+
+      </div>
+
+     
+
+   
+</div>
+<!-- barra usuario -->
+
+
+
+    
+  
+
+
+</nav>
+  <!-- Fim Barra -->
+
+
+  <%= will_paginate(@page,:params => {:descricao => @descri,:nquali => @nquali, :squali => @squali}, renderer: BootstrapPagination::Rails) %>
+<br>
+
+<h3>Consultar Questões</h3>
+<!-- Inicio Pesquisa -->
+
+<div class="form-group">
+  <%=form_for('consulta',url: {action:'consulta_questao'}, :hmtl =>{:class =>('form-horizontal')}) do |f| %>
+  <label class="control-label">Pesquise por palavras chaves</label>
+  <div class="input-group">
+    <span class="input-group-addon"> <span class="glyphicon glyphicon-search">  </span>  </span>
+    <input type="text" name="descricao" value="<%= @descri %>" class="form-control" />
+    <span class="input-group-btn">
+     <button type="submit" class="btn btn-primary">Consultar</button>
+    </span>
+
+  </div>
+   
+   <%end%>
+ 
+<!--Fim Pesquisa -->
+ 
+<%=@quali%>
+
+<table class="table table-striped">
+ <!-- Botão novo estava aqui -->
+
+
+  <thead>
+    <tr>
+    
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:descricao) %></th>
+      <th>Ver Resposta</th>
+      <th>Qualificado?</th>
+      <th> Cadastrado por: </th>
+      <th> Alterado por: </th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+   
+
+
+  </thead>
+  <tbody>
+
+    <% @ret.each do |questao| %>
+
+  
+   
+<%questaoUser= Questao.joins("inner join audits on audits.auditable_id = questoes.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = questoes.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and questoes.id = ?","Questao","update",questao["id"]).select("questoes.id, useres.nome_completo, audits.auditable_type").order('audits.id desc').take%>
+
+<%questaoCo = Questao.joins("inner join audits on audits.auditable_id = questoes.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = questoes.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and questoes.id = ?","Questao","update",questao["id"]).select("count(*)")%>
+
+<%questaoCo.each do |questaoCoo| %>
+
+
+<%if questaoCoo.count == 0
+    @alterou = "Sem Alterações"
+    @alterouData= "Sem Alterações"
+ 
+    
+    else 
+      @alterou = questaoUser.nome_completo
+       
+    end
+    
+    end
+
+       %>
+
+
+
+
+          
+       
+
+    <%
+       qualificado = QuestaoSubgrupo.where('questao_id=?', questao["id"]).count()
+
+
+      if(qualificado > 0)
+       qualificado1 = "Qualificada" 
+        @cor = "color:#0DC70D"
+        @icone = "glyphicon glyphicon-ok-sign"
+      else
+        qualificado1="Não&nbsp;Qualificada"
+        @cor = "color:#FF1111"
+        @icone = "glyphicon glyphicon-remove-sign"
+      end
+
+       @icone2 ="glyphicon glyphicon-education"
+       @cor2 = "color:#000000"
+    %>
+
+      <tr>
+       
+        <td><%= link_to questao["id"], '/questao/'+questao["id"].to_s %></td>
+        <td><span id="modalresp|<%=questao["id"].to_s%>"><%= questao["descricao"] %><br><p id='t<%=questao["id"].to_s%>' style='display: none;' ><br><b>Temas:</b><br><%=Qualificado(questao["id"])%> 
+          <br><b>Respostas:</b><br><%=Resposta(questao["id"])%></p>  </span></td>
+
+        <td  align=center><h3><span id=<%=questao["id"].to_s%> style=<%=@cor2%> class="<%=@icone2%> btquestao" title= <%=qualificado1.html_safe%>  ></td> </h3>  </td>
+
+        <td  align=center><h3><span id=<%=questao["id"].to_s%> style=<%=@cor%> class="<%=@icone%> btquestao" title= <%=qualificado1.html_safe%>  ></td> </h3>  </td>
+        <td> <%=questao["email"]%> </td>
+        <td> <%=@alterou%> </td>
+
+       <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      '/questoes/'+questao["id"].to_s+'/edit', :class => 'btn btn-primary btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      '/questoes/'+questao["id"].to_s,
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger btn-xs' %>
+                      
+          <%= link_to 'Respostas', '#dialogquali', data:{:remote => true, :toggle => 'modal', :target => '#dialogquali'},:class => 'btn btn-primary btn-xs', id: "add_resposta"  %>  
+
+          <% if @TipoUsuario == "Administrador" || @TipoUsuario == "Professor"  %>  
+          
+             <%= link_to "Qualificar",  "/qualificacoes?questao_id="+questao["id"].to_s+"&&pagina=questao/consulta_questao&&page="+@pagen.to_s+"&&descricao="+@descri.to_s+"&&nquali="+@nquali.to_s+"&&squali="+@squali.to_s, :class => 'btn btn-default btn-xs' %>
+
+         <% end %>
+
+
+        </td>
+      </tr>
+    
+   <% end %>
+
+  </tbody>
+</table>
+
+<button type="button" class="btn btn-primary" onclick= "NovoQualificar(<%= @contador %>)" >Qualificar Selecionadas</button>
+<br>
+<%= will_paginate(@page,:params => {:descricao => @descri,:nquali => @nquali, :squali => @squali}, renderer: BootstrapPagination::Rails) %>
+
+<h6> Desenvolvido por TI - Faceres </h6>
+<span class="label label-success">Versão: 5.2 </span>
+<br>
+<br>
+
+
+<!-- A partir daqui -->
+
+<div class="bs-component">
+  <div id="dialogquali" class="modal fade" role="dialog" style="display:none;" >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <h4 class="modal-title">Cadastro de Respostas</h4>
+        </div>
+
+        <!-- Teste -->
+
+         <table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:descricao) %></th>
+      <th><%= model_class.human_attribute_name(:correta) %></th>
+     
+     
+     
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+  
+  </thead>
+  <tbody>
+
+
+    <% @pergunta_id2 = params[:questao_id]%>
+   <%  @respostas2 = Resposta.where("pergunta_id = ?", @pergunta_id2)%>
+    <% @respostas2.each do |resposta| %>
+   
+   <!-- Teste SQL -->
+       
+
+  
+
+
+
+ 
+
+      <!-- Fim Teste SQL -->
+      
+<%#@respostasU.each do |respostaU| %>
+ 
+
+
+    <%
+       @respostacorreta = resposta.correta
+
+       if @respostacorreta == 1
+          @respostacorreta = "Correta"
+           @cor = "color:#0DC70D"
+
+        else
+         @respostacorreta = "Incorreta"        
+          @cor = "color:#FF1111"
+          end
+
+    %>
+      <tr>
+       
+        <td><%= link_to resposta.id, resposta_path(resposta) %></td>
+        <td><%= resposta.descricao %></td> 
+        <td><span style= <%=@cor%> ><b><%= @respostacorreta %></b></span> </td>
+     
+           
+    
+        <td>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_resposta_path(resposta), :class => 'btn btn-primary btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      resposta_path(resposta),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger btn-xs' %>
+        </td>
+       
+      </tr>
+       <% #end %>
+        <% end %>
+  </tbody>
+     </table>
+  
+
+        
+        
+
+        <!-- fim Teste -->
+
+
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-1">
+             
+            </div>
+            <div class="col-lg-10" style="height: 280px; overflow: auto;">
+            <div id=lrespostaq> 
+
+
+          </div>
+               
+               
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" onclick= "CadResp(<%=@pergunta_id%>)" >Cadastrar</button>
+          <button type="button" class="btn btn-default" onclick="carregapag()" data-dismiss="modal" >Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

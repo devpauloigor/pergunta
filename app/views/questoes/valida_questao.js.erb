@@ -1,0 +1,13 @@
+<%if(@validacao>0)%>
+
+
+alert("Questão já cadastrada");
+$("#fdescricao").removeClass("has-success");
+$("#fdescricao").addClass("has-error");
+$("#btsalvaquestao").addClass("disabled")
+<%else%>
+$("#fdescricao").removeClass("has-error");
+$("#fdescricao").addClass("has-success");
+$("#btsalvaquestao").removeClass("disabled")
+
+<%end%>

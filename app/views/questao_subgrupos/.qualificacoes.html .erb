@@ -1,0 +1,241 @@
+<%- model_class = QuestaoSubgrupo -%>
+
+
+
+<%
+@respostasU= Resposta.joins("inner join audits on audits.auditable_id = respostas.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = respostas.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and respostas.id = ?","Resposta","update",1).select("respostas.id, useres.email, audits.auditable_type")
+
+
+
+
+@sugG2 = Tema.joins("inner join questao_subgrupos on questao_subgrupos.tema_id = temas.id 
+inner join questoes on questao_subgrupos.questao_id = questoes.id").where( "questao_subgrupos.questao_id = ?",@pergunta_id).select("questao_subgrupos.tema_id")
+
+@subG = Tema.where('id not in(?)',@sugG2)
+
+
+
+%>
+
+
+
+  <%@TipoUsuario = User.where('id=?',current_user.id).take.perfil
+ if @TipoUsuario == "Administrador" || @TipoUsuario == "Professor" %>
+
+
+
+
+
+<div class="page-header">
+<h3> Qualifique a pergunta: </h3>
+ </div>
+<%= link_to 'Adicionar', '#dialog', data:{:remote => true, :toggle => 'modal', :target => '#dialog'},:class => 'btn btn-default btn-primary', id: "add_resposta" %>&nbsp;
+
+<%= link_to 'Voltar',questoes_path,:class => 'btn btn-default btn-primary' %>
+ 
+ <br>
+
+ 
+
+ <br>
+ <h4> Temas Adicionados </h4>
+  <table class='table  table-hover'  >
+<thead>
+    <tr>
+      <th>Descrição</th>
+          <th>   </th>
+       <th>Adicionado por:</th>
+      <th>Ação</th>
+    </tr>
+  </thead>
+
+
+
+
+ 
+  <%@resptem.each do |tema| %>
+ <% qsubGrupoUserCreate= QuestaoSubgrupo.joins("inner join audits on audits.auditable_id = questao_subgrupos.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id =questao_subgrupos.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and questao_subgrupos.id = ?","QuestaoSubgrupo","create",tema.id).select("questao_subgrupos.id, useres.nome_completo, audits.auditable_type")%>
+<% qsubGrupoUserCreate.each do |qsub_grupo| %>
+<% @cadastrou = qsub_grupo.nome_completo%>
+<%end%>
+
+  
+ 
+    <tbody> 
+
+
+<tr class="active">
+
+ <td><%=tema.descricao%></td> 
+<td>                                      </td>
+<td><%= @cadastrou%></td>
+ <td><%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      questao_subgrupo_path(tema.id),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-danger btn-xs' %></td>
+                         <%end%>             
+
+
+</tr>
+
+
+
+
+
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+ <h3><b> Pergunta: </b></h3>
+  <blockquote>
+<div align="left"> <%= Questao.find(@pergunta_id).descricao %></div>
+<img src = <%=  @questao = Questao.find(@pergunta_id).figura(:medium) %> />
+
+
+
+
+
+
+
+
+
+</blockquote>
+
+
+
+
+ <tbody>
+<h3><b> Respostas: </b></h3>
+
+<!-- Teste Respostas       -->
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Descrição</th>
+      <th>Correta?</th>
+    </tr>
+  </thead>
+
+ <% @respostas.each do |resposta| %>
+
+
+
+    <%
+       @respostacorreta = resposta.correta
+
+       if @respostacorreta == 1
+          @respostacorreta = "Correta"
+           @cor = "color:#0DC70D"
+
+        else
+         @respostacorreta = "Incorreta"
+        
+          @cor = "color:#FF1111"
+          end
+
+    %>
+      <tr>
+       
+      
+        <td><%= resposta.descricao %></td>       
+        <td><span style= <%=@cor%> ><b><%= @respostacorreta %></b></span> </td>
+        <td>
+        
+      </tr>
+    <% end %>
+
+
+
+<!-- Fim Teste Respostas -- >
+
+<!-- Modal -->
+
+
+<div class="bs-component">
+  <div id="dialog" class="modal fade" role="dialog" style="display:none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+          <h4 class="modal-title">Qualificação de Questões</h4>
+        </div>
+
+
+ 
+
+    
+
+
+   <%= select_tag 'tema_id', options_for_select(@subG.collect{ |u| [u.descricao, u.id] }) %>
+
+   
+
+
+
+        
+        
+
+  
+
+
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-1">
+             
+            </div>
+            <div class="col-lg-10" style="height: 280px; overflow: auto;">
+            <div id=lquestao_subgrupo> 
+
+
+          </div>
+               
+               
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" onclick= "CadRespSubgrupo(<%=@pergunta_id%>)" >Cadastrar</button>
+          <button type="button" class="btn btn-default" onclick="carregapag()" data-dismiss="modal" >Close</button>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Fim do Modal -->
+
+
+
+
+
+</table>
+
+
+ </tbody>
+
+</div>
+<%else%>
+<h1> Aviso! <h1>
+  Seu usuário não possui permissão para realizar esta operação.
+  <br>
+  <br>
+<%= link_to "Voltar", questoes_path, :class => 'btn btn-primary' %>
+
+<%end%>

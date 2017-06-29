@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Questao Provas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Prova</th>
+      <th>Questao</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @questao_provas.each do |questao_prova| %>
+      <tr>
+        <td><%= questao_prova.prova %></td>
+        <td><%= questao_prova.questao %></td>
+        <td><%= link_to 'Show', questao_prova %></td>
+        <td><%= link_to 'Edit', edit_questao_prova_path(questao_prova) %></td>
+        <td><%= link_to 'Destroy', questao_prova, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Questao prova', new_questao_prova_path %>

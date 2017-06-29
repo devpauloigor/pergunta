@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Provas</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @provas.each do |prova| %>
+      <tr>
+        <td><%= prova.nome %></td>
+        <td><%= link_to 'Show', prova %></td>
+        <td><%= link_to 'Edit', edit_prova_path(prova) %></td>
+        <td><%= link_to 'Destroy', prova, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Prova', new_prova_path %>

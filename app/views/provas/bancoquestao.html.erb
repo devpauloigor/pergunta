@@ -1,0 +1,246 @@
+<%- model_class = Questao -%>
+<%= javascript_tag do %>
+window.questoesURL = "<%=t questoes_url%>";
+
+<%end%>
+<div class="page-header">
+
+  <h1> <b><a href="/" style="text-decoration:none"><font color="#363636">Questões</font></b></a></h1>
+
+
+
+
+
+
+  <%= will_paginate(@page,:params => {:descricao => @descri,:nquali => @nquali, :squali => @squali}, renderer: BootstrapPagination::Rails) %>
+  <br>
+
+  <h3>Nova Prova</h3>
+  <!-- Inicio Pesquisa -->
+  <div class="form-group">
+    <%=form_for('consulta',url: {action:'bancoquestao'}, :hmtl =>{:class =>('form-horizontal')}) do |f| %>
+    <label class="control-label">Pesquise por palavras chaves</label>
+    <div class="input-group">
+      <span class="input-group-addon"> <span class="glyphicon glyphicon-search">  </span>  </span>
+      <input type="text" name="descricao" value="<%= @descri %>" class="form-control" />
+      <span class="input-group-btn">
+       <button type="submit" class="btn btn-primary">Consultar</button>
+     </span>
+
+   </div>
+
+   <%end%>
+
+   <!--Fim Pesquisa -->
+   <br>
+
+
+
+
+
+
+
+ </div>
+
+ <%=@quali%>
+
+ <table class="table table-striped">
+   <!-- Botão novo estava aqui -->
+
+
+   <thead>
+    <tr>
+      <th> Adicionar à Prova? </th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:descricao) %></th>
+      <th>Ver Resposta</th>
+      <th>Questão já Usada?</th>
+      <th> Cadastrado por: </th>
+      <th> Alterado por: </th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+    </tr>
+
+
+
+  </thead>
+  <tbody>
+
+    <% @ret.each do |questao| %>
+
+
+
+    <%questaoUser= Questao.joins("inner join audits on audits.auditable_id = questoes.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = questoes.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and questoes.id = ?","Questao","update",questao["id"]).select("questoes.id, useres.nome_completo, audits.auditable_type").order('audits.id desc').take%>
+
+    <%questaoCo = Questao.joins("inner join audits on audits.auditable_id = questoes.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = questoes.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and questoes.id = ?","Questao","update",questao["id"]).select("count(*)")%>
+
+    <%questaoCo.each do |questaoCoo| %>
+
+
+    <%if questaoCoo.count == 0
+      @alterou = "Sem Alterações"
+      @alterouData= "Sem Alterações"
+
+
+    else 
+      @alterou = questaoUser.nome_completo
+
+    end
+
+  end
+
+  %>
+
+
+
+
+
+
+
+  <%
+  qualificado = QuestaoSubgrupo.where('questao_id=?', questao["id"]).count()
+
+
+  if(qualificado > 0)
+   qualificado1 = "Qualificada" 
+   @cor = "color:#0DC70D"
+   @icone = "glyphicon glyphicon-ok-sign"
+ else
+  qualificado1="Não&nbsp;Qualificada"
+  @cor = "color:#FF1111"
+  @icone = "glyphicon glyphicon-remove-sign"
+end
+@icone2 ="glyphicon glyphicon-education"
+@cor2 = "color:#000000"
+%>
+
+
+
+<%
+@idu=current_user.id  
+@nomeorigi = "quest_"+@idu.to_s+".json"
+if(FileTest.exist?("#{Rails.root}/app/assets/images/provas/#{@nomeorigi}"))
+  path = File.join(Rails.root,"app/assets/images/provas",@nomeorigi)
+  @arq = File.read(path)
+  @js = JSON.parse(@arq)
+  @jsons = []
+  @checado=" "
+
+  @js.each do |js|
+   if(js["id"].to_i == questao["id"].to_i)
+    @checado="checked"
+
+  end
+end
+end
+
+%>
+
+<tr>
+  <td> <input id="chkquali<%= @contador %>" name="chkquali" value=<%= questao["id"].to_s%> type="checkbox" <%=@checado%> onclick="addQuest(<%=questao["id"].to_s%>,<%= @contador%>,<%= current_user.id%> )"   > </td>
+  <td><%= link_to questao["id"], '/questao/'+questao["id"].to_s %></td>
+
+   <%
+        @jatem = QuestaoProva.where("questao_id = ?", questao["id"].to_s).count
+        if @jatem >= 1
+
+        @provaqtem = QuestaoProva.where("questao_id=?", questao["id"].to_s).select('prova_id')
+        @provaqtem.each do |pqt|
+          @provaa = Prova.joins( 'inner join useres on provas.user_id = useres.id').where('provas.id=?',pqt.prova_id).select("provas.id, provas.nome, provas.user_id,to_char(provas.created_at,'DD/MM/YYYY') as datac ,useres.nome_completo")
+
+          @provaa.each do |pro|
+
+            @textovalida = "Atenção: Questão utilizada na prova: "+pro.nome+" do professor: "+pro.nome_completo+" criada no dia: "+pro.datac.to_s
+          end
+
+        end
+
+        tem = "glyphicon glyphicon-alert"
+        @cor = "color:#d9230f"
+        qualificado1="Questão&nbsp;já&nbsp;utilizada&nbsp;na&nbsp;prova&nbsp;"
+
+      else
+        @textovalida ="Questão nunca foi utilizada em provas da faculdade"
+         tem = "glyphicon glyphicon-ok"
+        @cor = "color:#1C86EE"
+        qualificado1="Questão&nbsp;nunca&nbsp;foi&nbsp;utilizada"
+
+        end
+    %>
+
+
+  <td><span id="modalresp|<%=questao["id"].to_s%>"><%= questao["descricao"] %><br><p id='t<%=questao["id"].to_s%>' style='display: none;' ><br><b><%=@textovalida%></b><br><%=Qualificado(questao["id"])%> 
+    <br><b>Respostas:</b><br><%=Resposta(questao["id"])%></p>  </span></td>
+
+    <td  align=center><h3><span id=<%=questao["id"].to_s%> style=<%=@cor2%> class="<%=@icone2%> btquestao" title= <%=qualificado1.html_safe%> ></td> </h3>  </td>
+
+    <td  align=center><b><h3><span id=<%=questao["id"].to_s%> style=<%=@cor%> class="<%=tem%> btquestao" title= <%=qualificado1.html_safe%>  ></td> </h3></b>  </td>
+    <td> <%=questao["email"]%> </td>
+    <td> <%=@alterou%> </td>
+
+    <td>
+      <%= link_to t('.edit', :default => t("helpers.links.edit")),
+      '/questoes/'+questao["id"].to_s+'/edit', :class => 'btn btn-primary btn-xs' %>
+      <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+      '/questoes/'+questao["id"].to_s,
+      :method => :delete,
+      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+      :class => 'btn btn-danger btn-xs' %>
+
+      <%= link_to 'Respostas', '#dialogquali', data:{:remote => true, :toggle => 'modal', :target => '#dialogquali'},:class => 'btn btn-primary btn-xs', id: "add_resposta"  %>  
+
+      <% if @TipoUsuario == "Administrador" || @TipoUsuario == "Professor"  %>  
+
+      <%= link_to "Qualificar",  "/qualificacoes?questao_id="+questao["id"].to_s+"&&pagina=questao/consulta_questao&&page="+@pagen.to_s+"&&descricao="+@descri.to_s+"&&nquali="+@nquali.to_s+"&&squali="+@squali.to_s, :class => 'btn btn-default btn-xs' %>
+
+      <% end %>
+
+
+    </td>
+  </tr>
+  <% @contador += 1%>
+  <% end %>
+
+</tbody>
+</table>
+
+
+
+<%= will_paginate(@page,:params => {:descricao => @descri,:nquali => @nquali, :squali => @squali}, renderer: BootstrapPagination::Rails) %>
+
+
+
+
+
+
+
+
+<!-- A partir daqui -->
+
+<div class="bs-component">
+  <div class="bs-component">
+    <div id="ajax-modal" class="modal fade" data-backdrop="static" role="dialog"  style="display:none;" >
+      <div class="modal-dialog" style="width: 900px; height: 1200px;overflow:auto">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close"  onclick="carregapag()" data-dismiss="modal" aria-hidden="true">x</button>
+            <h4 class="modal-title">Prova</h4>
+          </div>
+
+       
+
+          <div class="modal-body" style="width: 895px; height: 300px;overflow:auto" >
+            <span id="provamodal"></span>
+          </div>
+          <div class="progress progress-striped active" > 
+            <div class="progress-bar" id="progress-bar" style="width: 0%" ></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="btncadpro" class="btn btn-default" onclick= "CadPro(<%= current_user.id%>)" >Gerar Prova</button>
+            <button type="button" class="btn btn-default" onclick="carregapag()" data-dismiss="modal" >Close</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

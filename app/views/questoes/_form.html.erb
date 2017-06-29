@@ -1,0 +1,37 @@
+<%= form_for @questao, :html => {multipart: true} do |f| %>
+
+
+
+  <div id="fdescricao" class="form-group">
+    <%= f.label :descricao, :class => 'control-label' %>
+    <%= f.text_area :descricao, id:'txt_desc1', :class => 'form-control' %>
+  </div>
+    <br>
+    <div class="form-group">
+    <%= f.label :figura %>
+    <%= f.file_field :figura %>
+
+  </div>
+
+ 
+
+
+
+
+
+  <br>
+
+  <div class="form-actions">
+  	<br>
+
+    <%= f.submit  nil,:id=> "btsalvaquestao", :class => 'btn btn-primary'%>
+      
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                questoes_path, :class => 'btn' %>
+  </div>
+<% end %>
+
+
+
+
+

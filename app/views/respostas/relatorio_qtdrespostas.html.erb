@@ -1,0 +1,40 @@
+<h1><b> Quantidades de Respostas Cadastradas por Usuários </b></h1>
+<br>
+ <%@TipoUsuario = User.where('id=?',current_user.id).take.perfil
+ if @TipoUsuario == "Administrador"%>
+   
+<table class="table table-striped ">
+
+ <thead> 
+    <tr>
+     
+          
+      <th> Usuário </th>
+      <th> Quantidade de Respostas Cadastradas </th>
+       </tr>
+        </thead>
+        <tbody>
+
+        <%  @rel.each do |rel| %>
+        <tr class="info">
+        <td><b><%= rel.nome%></b></td>
+        <td><b><%= rel.count%></b></td>
+        </tr>
+        <%end%>
+</tbody>
+</table> 
+<div class="alert alert-dismissible alert-info">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>Leia!</strong> <a href="#" class="alert-link"></a><br>As informações de quantidade de respostas cadastradas contidas nesta página começaram a ser contabilizadas a partir da atualização 4.5 do sistema. Cadastros efetuados antes desta atualização não foram contabilizados.
+</div>
+
+ <%= link_to 'Voltar',questoes_path,:class => 'btn btn-default btn-primary' %>
+
+ <%else%>
+<h1> Aviso! <h1>
+  Seu usuário não possui permissão para realizar esta operação.
+  <br>
+  <br>
+<%= link_to "Voltar", questoes_path, :class => 'btn btn-primary' %>
+
+<%end%>

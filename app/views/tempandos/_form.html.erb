@@ -1,0 +1,21 @@
+<%= form_for(@tempando) do |f| %>
+  <% if @tempando.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@tempando.errors.count, "error") %> prohibited this tempando from being saved:</h2>
+
+      <ul>
+      <% @tempando.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :horario %><br>
+   <input type="datetime-local" name="bdaytime">
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

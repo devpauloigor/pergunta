@@ -1,0 +1,80 @@
+<%- model_class = Resposta -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+
+</div>
+
+
+
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:descricao) %>:</strong></dt>
+  <dd><%= @resposta.descricao %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:correta) %>:</strong></dt>
+  <dd><%= @resposta.correta %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:pergunta_id) %>:</strong></dt>
+  <dd><%= @resposta.pergunta_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:id) %>:</strong></dt>
+  <dd><%= @resposta.id %></dd>
+  
+<%respostaUser= Resposta.joins("inner join audits on audits.auditable_id = respostas.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = respostas.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and respostas.id = ?","Resposta","create",@resposta.id).select("respostas.id, useres.nome_completo, audits.auditable_type")%>
+  <%respostaUser.each do |respostaU| %>
+<dt>Cadastrado Por:</dt>
+<dd><%=respostaU.nome_completo%></dd>
+  <%end%>
+
+  <%respostaUserAlterada = Resposta.joins("inner join audits on audits.auditable_id = respostas.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = respostas.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and respostas.id = ?","Resposta","update",@resposta.id).select("respostas.id, useres.nome_completo, audits.auditable_type,audits.created_at").order('audits.id desc').take%>
+  <%respostaCo = Resposta.joins("inner join audits on audits.auditable_id = respostas.id inner join useres on useres.id = audits.user_id").where("audits.auditable_id = respostas.id and audits.user_id = useres.id and audits.auditable_type =? and audits.action = ? and respostas.id = ?","Resposta","update",@resposta.id).select("count(*)") %>
+
+  <%respostaCo.each do |respostaCoo| %>
+
+
+<%if respostaCoo.count == 0
+    @alterou = "Sem Alterações"
+    @alterouData= "Sem Alterações"
+ 
+    
+    else 
+      @alterou = respostaUserAlterada.nome_completo 
+       @alterouData=respostaUserAlterada.created_at 
+    end
+    
+    end
+
+       %>
+
+
+
+
+<dt>Alterado Por:</dt>
+<dd><%=@alterou%></dd>
+<dt>Alterado em:</dt>
+<dd><%=@alterouData%></dd>
+  
+
+</dl>
+
+<div class="form-actions">
+
+ <%= link_to "voltar", "/respostas?questao_id="+@resposta.pergunta_id.to_s, :class => 'btn btn-primary' %>
+
+  <%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_resposta_path(@resposta), :class => 'btn btn-primary' %>
+  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              resposta_path(@resposta),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>
+<br>
+<!-- Teste SQL -->
+
+
+  
+
+
+   <!-- Fim Teste SQL -->
+    
+    
+
+
+</div>

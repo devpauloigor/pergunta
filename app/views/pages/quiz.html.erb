@@ -1,0 +1,332 @@
+<html>
+<head>
+	<title></title>
+
+</head>
+<bodye> 
+
+	<%
+		@statusprova = Provaaluno.where("prova_id=? and aluno_id=?",@id, current_user.nome)  
+
+		@statusprova.each do |sp|
+			@jafez = sp.status
+		end
+		if (@jafez == 3)%>
+
+		<h1 align="center">Prova já realizada <span class="glyphicon glyphicon-thumbs-down text-info"></span> </h1>
+
+		<%elsif (@jafez == 1)%>
+			<h1 align="center">Tempo Esgotado<span class="glyphicon glyphicon-thumbs-down text-info"></span> </h1>
+
+
+	<%else%>
+
+
+	<%qid = 0%>
+	<%respv = ""%>
+	<%@questoes.each do |q|%>
+	<script type="text/javascript">
+
+		window.onload = function() {
+
+	if(<%=@jafez%> == 3 || <%=@jafez%> == 1 ){
+
+		window.location = "/pages/fimdeprova";  
+	}else{
+  // Códigos jQuery a serem executados quando a página carregar e correndo o risco de conflitar com outras bibliotecas JavaScript
+  var listaMarcados = document.getElementsByName("cities");
+  for (loop = 0; loop < listaMarcados.length; loop++) {
+  	var item = listaMarcados[loop];
+  	if (item.type == "checkbox" && item.checked) {
+      // alert(item.value);
+      document.getElementById("validadorcont").innerHTML = "true"
+      qtual = item.checked.value;
+
+       document.getElementById("qatual").innerHTML = item.value;
+      document.getElementById("qantiga").innerHTML = item.value;
+
+     
+
+  }
+}
+
+
+document.getElementById("vetor").innerHTML = <%=q.idquestao%>;
+}//fim else ja fez
+
+}
+
+
+   
+
+ 
+</script>
+
+<%@respostas = Resposta.where("pergunta_id=?",q.idquestao).order("random()")%>
+
+
+
+
+<div id="conteudo">
+<!-- Cronometro -->
+<%horaatual = DateTime.now.to_time%>
+
+<%timeup = 2.hours.ago%>
+<%timedown = 2.hours.ago%>
+<%provas = Provaaluno.where('aluno_id=?',current_user.nome)%>
+<%provas.each do |pp|%>
+<% nomeprova = Prova.where('id=?',@id)%>
+
+<!-- Gambiarra da pesada -->
+<%@duracao = Provaaluno.where('prova_id=?', @id)%>
+<%nomeprova.each do |np|%>
+<%@duracao.each do |du|%>
+<% @horinha = du.duracao.to_i%>
+<%end%>
+<!-- Fim Gambiarra da pesada -->
+
+<%datalimite = pp.data + 1.hours%>
+<%datalim = pp.data + @horinha.minutes%>
+
+<script>
+now = new Date()
+dayName = new Array ("domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado") 
+monName = new Array ("janeiro", "02", "março", "abril", "Maio", "junho","July", "agosto","September", "outubro", "novembro", "December")
+
+//var datanova = (monName[now.getMonth()]+" "+now.getDate()+", "+now.getFullYear()+", <%=datalim.strftime("%H:%M")%>");
+var datanova = (now.getFullYear()+" "+monName[now.getMonth()]+" "+now.getDate()+" "+", <%=datalim.strftime("%H:%M")%>")
+
+var target_date = new Date(datanova);
+//alert(datanova);
+//var target_date = new Date("December 01, 2016, 16:43").getTime();
+var dias, horas, minutos, segundos;
+var regressiva = document.getElementById("regressiva");
+
+
+setInterval(function () {
+   
+    var current_date = new Date().getTime();
+    var segundos_f = (target_date - current_date) / 1000;
+
+dias = parseInt(segundos_f / 86400);
+    segundos_f = segundos_f % 86400;
+    
+    horas = parseInt(segundos_f / 3600);
+    segundos_f = segundos_f % 3600;
+    
+    minutos = parseInt(segundos_f / 60);
+    segundos = parseInt(segundos_f % 60);
+
+//document.getElementById('dia').innerHTML = dias;
+document.getElementById('trete').innerHTML = datanova;
+document.getElementById('hora').innerHTML = horas;
+document.getElementById('minuto').innerHTML = minutos;
+//document.getElementById('segundo').innerHTML = segundos;
+ 
+var horinteiro = document.getElementById('hora').value;
+
+ if (horas <= 1){
+ 	
+ 	document.getElementById('leghora').textContent = "hora e";
+
+ } else{
+ 	document.getElementById('leghora').textContent ="horas e";
+ }
+
+  if ( minutos <= 1){
+ 	
+ 	document.getElementById('legminuto').textContent = "minuto para o término da prova";
+
+ } else{
+ 	document.getElementById('legminuto').textContent ="minutos para o término da prova";
+ 	//alert(horinteiro);
+ }
+
+ if(horas == 0 && minutos == 0 && segundos == 0){
+    //alert("Prova expirou");
+    cadresult(<%=current_user.id%>, 1)
+    
+}
+
+}, 1000);
+
+
+</script>
+<!--<p id="datinha"><%=pp.data + 100.minutes%></p>-->
+<%pp.data%><% Time.parse(pp.data.strftime("%Y-%m-%d %H:%M")).to_time%>  <% Calcdata(Time.parse(pp.data.strftime("%Y-%m-%d %H:%M")).to_time,horaatual)%>
+
+<%if  Calcdata(Time.parse(pp.data.strftime("%Y-%m-%d %H:%M")).to_time,horaatual) < @horinha%> 
+<%end%>
+<%end%>
+<%end%>
+
+
+				<%	@provaalunos  = Provaaluno.where("prova_id=? and aluno_id =?", @id, current_user.nome )
+
+					@provaalunos.each do |pa|
+							@provaalunoid2 = pa.id
+					end
+
+					%>
+
+<%@total = VwQtdquestprova.where('provaaluno=?',@provaalunoid2)%>
+
+<%@total.each  do |ttt|
+	@totalm = ttt.count
+
+end%>
+
+
+
+<!--<label><h4><b><span class="glyphicon glyphicon-time"></span> Tempo para o término da prova</b></h4></label> -->
+<table align="right"><tr><td><span class="glyphicon glyphicon-time"></span>&nbsp Faltam </td></td><td><div class="numero1" id="hora"></div></td><td id="leghora"> </td><td><div class="numero1" id="minuto"><td id="legminuto"></td><td>&nbsp  &nbsp<a class="btn btn-primary btn-xs" onclick="cadresult(<%=current_user.id%>, 0)"><span class="glyphicon glyphicon-send"></span>&nbsp Finalizar Prova</a></td></div></td></tr>
+<tr style="height:10px"><td><p class="legenda1"></p></td><td><p class="legenda1"></p></td></tr></table>
+
+</table>
+<br>
+<br>
+<br>
+<!-- Fim de tudo que se diz cronometro -->
+
+
+	<div class="panel panel-default">
+
+<p id="trete"></p>
+		<div class="panel-heading"><b><%=@page=params[:page]%>)</b> <%=q.descricao%></div>
+		<% @euamoarray = ["0"]%>
+		<div class="panel-body" align="left">
+			<%@respostas.each do |r|%>
+			<%
+			@idu=current_user.id  
+			@nomeorigi = "quest_"+@idu.to_s+".json"
+			if(FileTest.exist?("#{Rails.root}/app/assets/images/respostas/#{@nomeorigi}"))
+				path = File.join(Rails.root,"app/assets/images/respostas",@nomeorigi)
+				@arq = File.read(path)
+				@js = JSON.parse(@arq)
+				@jsons = []
+				@checado=" "
+
+				@js.each do |js|
+					@listacheck = js["numero"]
+						@euamoarray+= [@listacheck.to_s]
+					if(js["id"].to_i == r.id.to_i)
+						
+						@checado="checked"
+						
+					end
+
+
+
+				end
+			end
+
+			%>
+				<%	@provaalunos  = Provaaluno.where("prova_id=? and aluno_id =?", @id, current_user.nome )
+
+					@provaalunos.each do |pa|
+							@provaalunoid = pa.id
+					end
+
+					%>
+
+			<input id="radioresp<%=r.id%>" name="cities" value="<%=r.id%>" class="cities" onclick="addResp(<%=r.id%>,<%= current_user.id%>,<%=q.idquestao%>,<%=@page%>, <%=@provaalunoid%>)" type="checkbox" <%=@checado%> > <%=r.descricao%> <br>
+			<%
+				@rid = r.id
+				@qidquestao = q.idquestao
+
+			%>				
+			<%respv+=r.id.to_s+","%>
+			<%end%>
+			<%end%>
+			<br> 
+
+				<% if(@euamoarray.include? params[:page])
+					
+					
+					@escondebotao= ""
+					else
+					 
+					 @escondebotao= "style=display:none;" %>
+
+
+
+				<%end%>
+
+				<a  class="btn btn-danger btn-xs" <%=@escondebotao%> id="btndesmarca" onclick="DesmarcaResp(<%=@rid%>,<%= current_user.id%>,<%=@qidquestao%>,<%=@page%>, <%=@provaalunoid%>)" >Desmarcar Resposta <span class="glyphicon glyphicon-unchecked"></span><span class="glyphicon glyphicon-check"></span></a>
+				
+		</div>
+
+	</div>
+	
+	<p id="vetor" hidden>vetor</p>
+	<p id="qantiga" hidden>questao antiga</p><BR>
+	<p id="qatual" hidden>questao atual</p><BR>
+
+
+	
+
+
+
+<br>
+
+	<%= will_paginate @questoes, renderer: BootstrapPagination::Rails %>	
+</div>
+
+<div id="menu">
+    <%@ativado = ""%>
+	<%@conta = 1%>
+
+	<%@questoes.each do |qp|%>
+		
+			<%@provaidd = qp.idprova %>
+	<%@questpainel = QuestaoProva.where('prova_id=?',qp.idprova)
+	
+		
+
+	@questpainel.each do |pa|
+
+		%>
+<%if (@conta.to_i == @page.to_i )
+				@ativado = "active"
+			end%>
+
+				<%	@testoso = "Não Não"
+				if(@euamoarray.include? @conta.to_s)
+					@testoso= "sim sim"
+				end 
+
+			%>
+
+		<div class="list-group">
+		
+		<%if @testoso== "sim sim"
+			@classe = "glyphicon glyphicon-ok success text-success"%>
+		  
+			<a href="/pages/quiz?idprova=<%=qp.idprova%>&page=<%=@conta%>" id="btnlista<%=@conta%>" class="list-group-item <%=@ativado%>" >Questão <%=@conta%> <span id="elerespondeu<%=@conta%>" class="<%=@classe%>"></span></a>
+			<%@conta = @conta+1%>
+			<%@ativado = " "%>
+
+			<% else%>
+				<a href="/pages/quiz?idprova=<%=qp.idprova%>&page=<%=@conta%>" class="list-group-item <%=@ativado%>" >Questão <%=@conta%> <span id="elerespondeu<%=@conta%>" class=""></span></a>
+			<%@conta = @conta+1%>
+			<%@ativado = " "%>
+
+				<%end #fim if sim sim%>
+			<%end%>
+
+			<%end%>
+			<%end%>
+		</div>
+
+
+<p id="qtdrespondidas"><%=@js.size%></p>
+<p id="qtdtotalquest"><%=@questoes.total_pages%></p>
+<p id="validadorcont">false</p>
+	</bodye> 
+	</html> 
+
+
+
+
+
+

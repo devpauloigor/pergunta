@@ -1,0 +1,47 @@
+<%- model_class = User -%>
+<h2>Sign up</h2>
+
+
+
+<div class="field">
+ 
+    <p>Nome: <input id="txt_nome" name="nome"> </textarea></p>
+</div>
+
+  <div class="field">
+    
+    
+     <p>Email: <input id="txt_email" name="email"> </textarea></p>
+  </div>
+
+  <div class="field">
+   
+    
+   
+  <p>Perfil de usuário <select id="txt_perfil" name="Perfil">   </p>
+<option value="Administrador" selected >Administrador</option>
+<option value="Padrão" >Padrão</option>
+<option value="Professor" >Professor</option>
+</select>
+
+  </div>
+
+  <div class="field">
+ 
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+   <p>password: <input type="password" id="txt_password" name="password"> </textarea></p>  </div>
+
+  <div class="field">
+  
+    <p>confirme o password: <input type="password" id="txt_password_confirmation" name="password_confirmation"> </textarea></p> 
+  </div>
+  <br>
+
+  <div class="actions">
+    <button type="button" class="btn btn-default" onclick= "CadRegist()" >Cadastrar</button>
+  </div>
+
+
+<%= render "devise/shared/links" %>

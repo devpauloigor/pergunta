@@ -1,0 +1,32 @@
+<h1>Provas concluídas</h1>
+
+ <div class="col-lg-4">
+<label class="control-label" for="focusedInput">Período inicial</label>
+<%= select_tag  'vestibulando_cidade_id', options_for_select(@turmas.collect  { |p| [p.descricao, p.id]}),:class => 'form-control'%> 
+</div>
+
+
+<div class="col-lg-4">
+<label class="control-label" for="focusedInput">Período inicial</label>
+<input type="date" id="dataprova" class="form-control" name="bdaytime" />
+</div>
+
+<div class="col-lg-4">
+<label class="control-label" for="focusedInput">Período final</label>
+<input type="date" id="dataprova" class="form-control" name="bdaytime" />
+</div>
+
+</br>
+</br>
+</br>
+</br>
+<div align="left" class="col-lg-4">
+<a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Pesquisar</a>
+
+</div>
+
+
+
+
+
+

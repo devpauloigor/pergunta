@@ -1,0 +1,6 @@
+$("#selSubGrupo").empty();
+$("#selSubGrupo").append("<option value=0>Sub Grupo</option>");
+<% @csubgrupo.each do |subgrupo| %>
+	$("#selSubGrupo").append("<option value=<%= subgrupo.id%>> <%=subgrupo.nome%> </option>");
+
+	<%end%>

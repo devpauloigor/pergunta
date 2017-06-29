@@ -1,0 +1,264 @@
+@import "simplex/base";
+
+// Simplex 3.3.1
+// Bootswatch
+// -----------------------------------------------------
+
+@import url("//fonts.googleapis.com/css?family=Open+Sans:400,700");
+
+.btn-shadow(@color) {
+  #gradient > .vertical-three-colors(lighten(@color, 3%), @color, 6%, darken(@color, 3%));
+  filter: none;
+  border: 1px solid darken(@color, 10%);
+}
+
+// Navbar =====================================================================
+
+.navbar {
+
+  &-inverse {
+
+    .badge {
+      background-color: #fff;
+      color: @brand-primary;
+    }
+  }
+}
+
+// Buttons ====================================================================
+
+.btn {
+  font-family: @headings-font-family;
+}
+
+.btn-default,
+.btn-default:hover {
+  .btn-shadow(@btn-default-bg);
+}
+
+.btn-primary,
+.btn-primary:hover {
+  .btn-shadow(@btn-primary-bg);
+}
+
+.btn-success,
+.btn-success:hover {
+  .btn-shadow(@btn-success-bg);
+}
+
+.btn-info,
+.btn-info:hover {
+  .btn-shadow(@btn-info-bg);
+}
+
+.btn-warning,
+.btn-warning:hover {
+  .btn-shadow(@btn-warning-bg);
+}
+
+.btn-danger,
+.btn-danger:hover {
+  .btn-shadow(@btn-danger-bg);
+}
+
+// Typography =================================================================
+
+body {
+  font-weight: 200;
+}
+
+bodye {
+    color: #000;
+    font-weight: 200;
+    }
+
+// Tables =====================================================================
+
+th {
+  color: @headings-color;
+}
+
+// Forms ======================================================================
+
+legend {
+  color: @headings-color;
+}
+
+label {
+  font-weight: normal;
+}
+
+.has-warning {
+  .help-block,
+  .control-label {
+    color: @brand-danger;
+  }
+
+  .form-control,
+  .form-control:focus {
+    border-color: @brand-danger;
+  }
+}
+
+.has-error {
+  .help-block,
+  .control-label {
+    color: @brand-primary;
+  }
+
+  .form-control,
+  .form-control:focus {
+    border-color: @brand-primary;
+  }
+}
+
+.has-success {
+  .help-block,
+  .control-label {
+    color: @brand-success;
+  }
+
+  .form-control,
+  .form-control:focus {
+    border-color: @brand-success;
+  }
+}
+
+// Navs =======================================================================
+
+.pager {
+  a {
+    color: @headings-color;
+  }
+
+  a:hover,
+  .active > a, {
+    border-color: @brand-primary;
+    color: #fff;
+  }
+
+  .disabled > a {
+    border-color: @pager-border;
+  }
+}
+
+.contagem{
+width:300px;
+height:70px;
+background-color: #ffffff;
+}
+
+.numero
+{
+min-width: 20px;
+max-width: 55px;
+background-color: #efefef;
+color: #000000;
+font-size: 22px;
+margin: 5px;
+text-align: center;
+border-radius: 5px;
+padding: 5px;
+}
+
+.legenda{
+height: 25px;
+line-height: 10px;
+font-size:12px;
+background-color: #ffffff;
+text-align: center;
+}
+
+
+
+
+.footer {
+   padding-top: 5px;
+   border-top: 1px solid #eaeaea;
+   position: absolute;
+   width: 100%;
+
+   ul {
+    float: right;
+    list-style: none;
+   }
+   ul li {
+    float: left;
+    margin-left: 15px;
+   }
+
+
+ }
+
+.contagem1{
+width:300px;
+height:40px;
+background-color: #ffffff;
+}
+
+.numero1
+{
+min-width: 20px;
+max-width: 20px;
+background-color: #ffffff;
+color: #000000;
+font-size: 12px;
+margin: 5px;
+text-align: center;
+border-radius: 8px;
+padding: 5px;
+}
+
+.legenda1{
+height: 10px;
+line-height: 10px;
+font-size:12px;
+background-color: #ffffff;
+text-align: center;
+}
+
+#conteudo {
+    width: 78%;
+    float: right;
+    text-align: center;
+    }
+
+#menu {
+    width: 20%;
+    margin: 0; padding: 0;
+    float: left;
+    }
+
+
+#menu ul li {
+    margin: 0; padding: 0px;
+    border-bottom: 1px solid #CCC;
+    text-align: left;
+    list-style-type: none;
+    }
+
+#menu a:link {
+    background: #ffffff;
+    color: #777;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 8px;
+    display: block;
+    }
+
+#menu a:hover {
+    background: #d9230f;
+    color: #ffffff;
+    }
+
+
+
+
+
+
+
+// Indicators =================================================================
+
+// Progress bars ==============================================================
+
+// Containers =================================================================

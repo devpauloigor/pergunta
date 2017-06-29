@@ -1,0 +1,2 @@
+module TempandosHelper
+end
